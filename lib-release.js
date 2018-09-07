@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const outdent = require('outdent');
 const execa = require('execa');
 const promiseSeries = require('promise.series');
