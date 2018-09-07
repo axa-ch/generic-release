@@ -20,6 +20,16 @@ const BETA = 'beta';
 
 process.stdin.setEncoding('utf8');
 
+const mapCommands = {
+  'bump-beta': 'npmversion --increment prerelease --preid beta --force-preid',
+  'bump-major': 'npmversion --increment major',
+  'bump-major-beta': 'npmversion --increment major --preid beta --force-preid',
+  'bump-minor': 'npmversion --increment minor',
+  'bump-minor-beta': 'npmversion --increment minor --preid beta --force-preid',
+  'bump-patch': 'npmversion --increment patch',
+  'bump-patch-beta': 'npmversion --increment patch --preid beta --force-preid',
+}
+
 const execaPipeError = (file, ...rest) => {
   const isCommand = rest.length === 0;
   const params = isCommand ? file.split(/\s+/) : [file, ...rest];
@@ -272,9 +282,14 @@ const confirmedRelease = (type, version) => {
       console.log(chalk.cyan(outdent`
           Step 2 complete...
         `));
+    }).catch((reason) => {
+      if (!~reason.stdout.indexOf('working tree clean')) {
+        console.error(chalk.red(reason));
+        process.exit(1);
+      }
     }),
     () => execaSeries([
-      type === UNSTABLE ? `npm run bump-${version === BETA ? '' : `${version}-`}beta` : `npm run bump-${version}`,
+      type === UNSTABLE ? mapCommands[`bump-${version === BETA ? '' : `${version}-`}beta`] : mapCommands[`bump-${version}`],
     ]).then(() => {
       console.log(chalk.cyan(outdent`
           Step 3 complete...
