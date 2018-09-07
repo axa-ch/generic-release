@@ -15,6 +15,7 @@ Release script needed to release the PODs to NPM. Make sure to only release the 
 * In your `.npmignore` make sure to add all development folders like `src` or `stack`. Remember, npm publish will ignore the `.gitignore` if a `.npmignore` file is in the root directory ⚡
 * Make sure that in your package.json the correct org is set like so: `@axa-ch/your-awesome-project` ⚡
 * When starting your development, make sure to set the version `0.0.0` if you start in BETA. ⚡ This setting also have to be applied into the package.json
+* Add a dummy build script in your package.json `"build": "echo \"Placeholder here\"",`
 * Make sure that you have a npm account in the `axa-ch` npm org
 * Log in into npm in your cli simply by `npm login`
 * Now we are ready to release the first version to NPM! Only for very most first time, run `npm publish --access public`
@@ -37,6 +38,7 @@ Config example of the axa-ch-pod:
   "description": "AXA CH pod",
   "scripts": {
     "release": "generic-release"
+    "build": "echo \"Placeholder here\""
   },
   "repository": {
     "type": "git",
