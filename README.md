@@ -23,9 +23,10 @@ Release script needed to release the PODs to NPM. Make sure to only release the 
 * You can run the release script simply by running `node_modules/.bin/generic-release` in your cli in the root directory of your project. Of course you can also create a npm job for it like so:
 ```
 "scripts": {
-  "release": "generic-release"
+  "release": "generic-release lib",
 }
 ```
+_Don't forget to add your folders containing your lib exports like so: `generic-release lib dist whatever`!_
 
 Have fun in releasing!
 
@@ -37,7 +38,7 @@ Config example of the axa-ch-pod:
   "version": "0.0.0",
   "description": "AXA CH pod",
   "scripts": {
-    "release": "generic-release"
+    "release": "generic-release lib"
     "build": "echo \"Placeholder here\""
   },
   "repository": {
