@@ -18,6 +18,8 @@ const MINOR = 'minor';
 const PATCH = 'patch';
 const BETA = 'beta';
 
+const processArgs = process.argv.slice(2)
+
 process.stdin.setEncoding('utf8');
 
 const mapCommands = {
@@ -214,7 +216,7 @@ const release = (type, version) => {
 
       I will do now the following:
 
-      1. build the lib folder by running npm run build
+      1. build the ${processArgs.length? `${processArgs.join(' ')} fodlers` : 'NONE'} folder by running npm run build
       2. bump the desired version
       3. publish to npm
       4. ${chalk.red.bold(`Don't forget to merges your hotfix branches into ${DEVELOP_TRUNK} too`)}
@@ -229,7 +231,7 @@ const release = (type, version) => {
       I will do now the following:
 
       1. pull the ${DEVELOP_TRUNK} branch
-      2. build the lib folder by running npm run build
+      2. build the ${processArgs.length? `${processArgs.join(' ')} fodlers` : 'NONE'} folder by running npm run build
       3. bump the desired version
       4. publish to npm
       5. merge ${DEVELOP_TRUNK} into ${MASTER_TRUNK} and push
@@ -277,6 +279,7 @@ const confirmedRelease = (type, version) => {
     () => execaSeries([
       hasTestScript && 'npm run test',
       'npm run build',
+      processArgs.length ? `git add ./${processArgs.join(' ./')}`: '',
       'git commit -m"rebuild"',
     ]).then(() => {
       console.log(chalk.cyan(outdent`
