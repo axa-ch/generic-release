@@ -58,4 +58,4 @@ Config example of the axa-ch-pod:
 ```
 
 
-#### License: AXA Versicherungen AG. All rights reserved
+#### License: AXA Versicherungen AG
