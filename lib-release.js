@@ -151,13 +151,13 @@ promiseSeries([
   ])
     .then(() => {
       console.log(chalk.cyan(outdent`
-        You have proper permission to push to your git remote
+        You have proper permissions to push to your remote git.
       `))
     })
     .catch((reason) => {
       console.log(chalk.red(outdent`
 
-        Attention: You have no permission to push to your remote ${DEVELOP_TRUNK}
+        Attention: You have no permissions to push to your remote ${DEVELOP_TRUNK}!
 
         Please check with your remote's git admin.
       `));
