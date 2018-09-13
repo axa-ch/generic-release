@@ -143,6 +143,27 @@ promiseSeries([
 
         `));
     }),
+  () => execaSeries([
+    `git checkout ${DEVELOP_TRUNK}`,
+    'git pull',
+    'git commit --allow-empty -m "Trigger real permission checks"',
+    'git push',
+  ])
+    .then(() => {
+      console.log(chalk.cyan(outdent`
+        You have proper permission to push to your git remote
+      `))
+    })
+    .catch((reason) => {
+      console.log(chalk.red(outdent`
+
+        Attention: You have no permission to push to your remote ${DEVELOP_TRUNK}
+
+        Please check with your remote's git admin.
+      `));
+
+      throw reason;
+    }),
 ]).then(() => {
   // process.exit(0);
 }).catch((reason) => {
