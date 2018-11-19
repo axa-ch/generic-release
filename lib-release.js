@@ -252,8 +252,8 @@ const release = (type, version) => {
       I will do now the following:
 
       1. pull the ${DEVELOP_TRUNK} branch
-      2. bump the desired version
-      3. build the ${processArgs.length? `${processArgs.join(' ')} fodlers` : 'NONE'} folder by running npm run build
+      2. build the ${processArgs.length? `${processArgs.join(' ')} fodlers` : 'NONE'} folder by running npm run build
+      3. bump the desired version
       4. publish to npm
       5. merge ${DEVELOP_TRUNK} into ${MASTER_TRUNK} and push
       6. sync ${DEVELOP_TRUNK} with ${MASTER_TRUNK} again
@@ -286,6 +286,9 @@ const confirmedRelease = (type, version) => {
   const TRUNK = isHotfix ? MASTER_TRUNK : DEVELOP_TRUNK;
   const { scripts } = pkj;
   const hasTestScript = scripts.test;
+  const versionBump = type === UNSTABLE
+    ? mapCommands[`bump-${version === BETA ? '' : `${version}-`}beta`]
+    : mapCommands[`bump-${version}`]
 
   let releaseSteps = [
     () => execaSeries([
@@ -298,26 +301,30 @@ const confirmedRelease = (type, version) => {
         `));
     }),
     () => execaSeries([
-      type === UNSTABLE ? mapCommands[`bump-${version === BETA ? '' : `${version}-`}beta`] : mapCommands[`bump-${version}`],
-    ]).then(() => {
-      console.log(chalk.cyan(outdent`
-          Step 2 complete...
-        `));
-    }),
-    () => execaSeries([
       hasTestScript && 'npm run test',
+      // make sure that the correct new version is within the build
+      `${versionBump} --nogit-commit --nogit-tag`,
       'npm run build',
       processArgs.length ? `git add ./${processArgs.join(' ./')}`: '',
+      // IMPORTANT: avoid version bump to be committed twice
+      'git checkout -- package.json',
       'git commit -m"rebuild"',
     ]).then(() => {
       console.log(chalk.cyan(outdent`
-          Step 3 complete...
+          Step 2 complete...
         `));
     }).catch((reason) => {
       if (!~reason.stdout.indexOf('working tree clean')) {
         console.error(chalk.red(reason));
         process.exit(1);
       }
+    }),
+    () => execaSeries([
+      type === UNSTABLE ? mapCommands[`bump-${version === BETA ? '' : `${version}-`}beta`] : mapCommands[`bump-${version}`],
+    ]).then(() => {
+      console.log(chalk.cyan(outdent`
+          Step 3 complete...
+        `));
     }),
     () => execaSeries([
       `npm publish ${version === BETA ? ' --tag beta' : ''}`,
