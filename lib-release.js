@@ -237,8 +237,8 @@ const release = (type, version) => {
 
       I will do now the following:
 
-      1. bump the desired version
-      2. build the ${processArgs.length? `${processArgs.join(' ')} fodlers` : 'NONE'} folder by running npm run build
+      1. build the ${processArgs.length? `${processArgs.join(' ')} fodlers` : 'NONE'} folder by running npm run build
+      2. bump the desired version
       3. publish to npm
       4. ${chalk.red.bold(`Don't forget to merges your hotfix branches into ${DEVELOP_TRUNK} too`)}
 
