@@ -286,7 +286,7 @@ const confirmedRelease = (type, version) => {
   const TRUNK = isHotfix ? MASTER_TRUNK : DEVELOP_TRUNK;
   const { scripts } = pkj;
   const hasTestScript = scripts.test;
-  const versionBump = type === UNSTABLE
+  const versionBumpScript = type === UNSTABLE
     ? mapCommands[`bump-${version === BETA ? '' : `${version}-`}beta`]
     : mapCommands[`bump-${version}`]
 
@@ -303,7 +303,7 @@ const confirmedRelease = (type, version) => {
     () => execaSeries([
       hasTestScript && 'npm run test',
       // make sure that the correct new version is within the build
-      `${versionBump} --nogit-commit --nogit-tag`,
+      `${versionBumpScript} --nogit-commit --nogit-tag`,
       'npm run build',
       processArgs.length ? `git add ./${processArgs.join(' ./')}`: '',
       // IMPORTANT: avoid version bump to be committed twice
@@ -320,7 +320,7 @@ const confirmedRelease = (type, version) => {
       }
     }),
     () => execaSeries([
-      type === UNSTABLE ? mapCommands[`bump-${version === BETA ? '' : `${version}-`}beta`] : mapCommands[`bump-${version}`],
+      versionBumpScript,
     ]).then(() => {
       console.log(chalk.cyan(outdent`
           Step 3 complete...
