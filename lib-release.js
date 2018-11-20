@@ -32,9 +32,11 @@ const mapCommands = {
   'bump-patch-beta': 'npmversion --increment patch --preid beta --force-preid',
 }
 
+const reCommandSplit = /(?:'.*?'|".*?"|\S+)/
+const filterEmptyArgs = (arg) => !!arg
 const execaPipeError = (file, ...rest) => {
   const isCommand = rest.length === 0;
-  const params = isCommand ? file.split(/\s+/) : [file, ...rest];
+  const params = isCommand ? file.split(reCommandSplit).filter(filterEmptyArgs) : [file, ...rest];
   const [command, ...args] = params;
   const env = {
     // This is critical for running smooth on windows behind enterprise proxies
