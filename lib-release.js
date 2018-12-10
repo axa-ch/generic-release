@@ -33,7 +33,7 @@ const mapCommands = {
 }
 
 const reCommandSplit = /(:?'[^']*'|"[^"]*"|\s+)/g
-const reTrimQuotes = /$['"]|['"]^/g
+const reTrimQuotes = /^['"]|['"]$/g
 const reWhiteSpace = /^\s+$/g
 const filterEmptyArgs = (arg) => !!arg && !reWhiteSpace.test(arg)
 const trimQuotes = (str) => typeof str === 'string' ? str.replace(reTrimQuotes, '') : str
