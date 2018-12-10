@@ -33,8 +33,10 @@ const mapCommands = {
 }
 
 const reCommandSplit = /(:?'[^']*'|"[^"]*"|\s+)/g
+const reTrimQuotes = /$['"]|['"]^/g
 const reWhiteSpace = /^\s+$/g
 const filterEmptyArgs = (arg) => !!arg && !reWhiteSpace.test(arg)
+const trimQuotes = (str) => typeof str === 'string' ? str.replace(reTrimQuotes, '') : str
 const execaPipeError = (file, ...rest) => {
   const isCommand = rest.length === 0;
   const params = isCommand ? file.split(reCommandSplit).filter(filterEmptyArgs) : [file, ...rest];
@@ -48,7 +50,7 @@ const execaPipeError = (file, ...rest) => {
     NO_UPDATE_NOTIFIER: true,
   };
 
-  const exec = execa(command, args, {
+  const exec = execa(command, args.map(trimQuotes), {
     env,
   });
 
