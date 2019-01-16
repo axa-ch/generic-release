@@ -20,6 +20,9 @@
     "outdent": "^0.5.0",
     "promise.series": "^0.2.0"
   },
+  "peerDependencies": {
+    "npmversion": "^1.7.0"
+  },
   "author": "Luca Mele",
   "license": "SEE LICENSE IN README.md",
   "bugs": {
