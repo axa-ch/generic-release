@@ -4,7 +4,7 @@
   "description": "Release script needed to release the PODs to NPM. It releases ONLY lib folder!",
   "main": "index.js",
   "scripts": {
-    "release": "node ./lib-release.js",
+    "release": "npm version patch -m\"bump to version %s\" && git push && git push --tags && npm publish",
     "test": "echo \"Todo Test\"",
     "build": "echo \"Placeholder here\""
   },
