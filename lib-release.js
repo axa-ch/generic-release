@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const readline = require('readline');
 const outdent = require('outdent');
 const execa = require('execa');
 const promiseSeries = require('promise.series');
@@ -21,6 +22,12 @@ const BETA = 'beta';
 const processArgs = process.argv.slice(2)
 
 process.stdin.setEncoding('utf8');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
 
 const mapCommands = {
   'bump-beta': 'npmversion --increment prerelease --preid beta --force-preid',
@@ -386,13 +393,8 @@ let step = 0;
 let releaseType = '';
 let releaseVersion = '';
 
-process.stdin.on('readable', () => {
-  const chunk = process.stdin.read();
-  if (chunk === null) {
-    return;
-  }
-
-  switch (chunk.trim()) {
+rl.on('line', function (line) {
+  switch (line.trim()) {
     case 'y':
       if (step > 0) {
         return;
@@ -479,7 +481,6 @@ process.stdin.on('readable', () => {
   }
 });
 
-
-process.stdin.on('end', () => {
-  process.stdout.write('end');
+rl.on('close', () => {
+  rl.write('end');
 });
