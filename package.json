@@ -1,6 +1,6 @@
 {
   "name": "@axa-ch/generic-release",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Release script needed to release the PODs to NPM. It releases ONLY lib folder!",
   "main": "index.js",
   "scripts": {
