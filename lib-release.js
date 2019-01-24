@@ -321,17 +321,21 @@ const confirmedRelease = (type, version) => {
       // IMPORTANT: avoid version bump to be committed twice
       'git checkout -- package.json',
       'git commit -m"rebuild"',
-    ]).then(() => {
+    ]).catch((reason) => {
+      const { stdout = '' } = reason;
+
+      // It might be that the build doesn't change any files on git but on npm. Therefore we need to ignore a commit
+      // without changes.
+      // If I’m not mistaken, they changed the phrasing from ‘working directory’ to ‘working tree’ in git v2.9.
+      if (stdout.indexOf('working tree clean') !== -1 || stdout.indexOf('working directory clean') !== -1) {
+        return
+      }
+      console.error(chalk.red(reason));
+      process.exit(1);
+    }).then(() => {
       console.log(chalk.cyan(outdent`
           Step 2 complete...
         `));
-    }).catch((reason) => {
-      const { message = '', stdout = '' } = reason;
-
-      if ((message + stdout).indexOf('working tree clean') === -1) {
-        console.error(chalk.red(reason));
-        process.exit(1);
-      }
     }),
     () => execaSeries([
       versionBumpScript,
