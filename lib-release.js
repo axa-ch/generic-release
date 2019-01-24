@@ -326,7 +326,9 @@ const confirmedRelease = (type, version) => {
           Step 2 complete...
         `));
     }).catch((reason) => {
-      if (!~reason.stdout.indexOf('working tree clean')) {
+      const { message = '', stdout = '' } = reason;
+
+      if ((message + stdout).indexOf('working tree clean') === -1) {
         console.error(chalk.red(reason));
         process.exit(1);
       }
