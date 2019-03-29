@@ -144,7 +144,7 @@ promiseSeries([
       console.log(chalk.yellow(whoami.trim()));
     }),
   () => execaSeries([
-    `git checkout ${DEVELOP_TRUNK}`,
+    `git checkout ${DEVELOP_TRUNK} --quiet`,
     'git pull --quiet',
     'git commit --allow-empty -m "Trigger real permission checks"',
     'git push',
