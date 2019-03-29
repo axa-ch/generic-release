@@ -363,6 +363,7 @@ const confirmedRelease = (type, version) => {
       ...releaseSteps,
       () => execaSeries([
         `git checkout ${MASTER_TRUNK} --quiet`,
+        'git pull',
         `git merge --no-ff ${DEVELOP_TRUNK}`,
         'git push',
         'git push --tags',
