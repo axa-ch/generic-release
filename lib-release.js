@@ -145,7 +145,7 @@ promiseSeries([
     }),
   () => execaSeries([
     `git checkout ${DEVELOP_TRUNK}`,
-    'git pull',
+    'git pull --quiet',
     'git commit --allow-empty -m "Trigger real permission checks"',
     'git push',
   ])
@@ -305,7 +305,7 @@ const confirmedRelease = (type, version) => {
   let releaseSteps = [
     () => execaSeries([
       `git checkout ${TRUNK} --quiet`,
-      'git pull',
+      'git pull --quiet',
       `git checkout -b ${RELEASE_TMP}  --quiet`,
     ]).then(() => {
       console.log(chalk.cyan(outdent`
@@ -347,7 +347,7 @@ const confirmedRelease = (type, version) => {
     () => execaSeries([
       `npm publish ${version === BETA ? ' --tag beta' : ''}`,
       `git checkout ${TRUNK} --quiet`,
-      'git pull',
+      'git pull --quiet',
       `git merge --ff-only ${RELEASE_TMP}`,
       'git push',
       'git push --tags',
@@ -363,7 +363,7 @@ const confirmedRelease = (type, version) => {
       ...releaseSteps,
       () => execaSeries([
         `git checkout ${MASTER_TRUNK} --quiet`,
-        'git pull',
+        'git pull --quiet',
         `git merge --no-ff ${DEVELOP_TRUNK}`,
         'git push',
         'git push --tags',
