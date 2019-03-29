@@ -347,6 +347,7 @@ const confirmedRelease = (type, version) => {
     () => execaSeries([
       `npm publish ${version === BETA ? ' --tag beta' : ''}`,
       `git checkout ${TRUNK} --quiet`,
+      'git pull',
       `git merge --ff-only ${RELEASE_TMP}`,
       'git push',
       'git push --tags',
