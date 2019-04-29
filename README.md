@@ -28,6 +28,8 @@ Release script needed to release the PODs to NPM. Make sure to only release the 
 ```
 _Don't forget to add your folders containing your lib exports like so: `generic-release lib dist whatever`!_
 
+:grey_exclamation: For apps created with [create-pod-app](https://github.com/axa-ch/create-pod-app), use only: `"release": "generic-release"`.
+
 Have fun in releasing!
 
 Config example of the axa-ch-pod:
