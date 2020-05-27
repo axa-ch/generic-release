@@ -89,6 +89,21 @@ console.log(chalk.cyan(outdent`
   `));
 
 promiseSeries([
+  () => execaPipeError('git diff --exit-code --quiet HEAD')
+    .then(({ stdout }) => stdout)
+    .catch((reason) => {
+      console.log(chalk.red(outdent`
+
+        Attention: Your working tree is not clean. I will abort the action
+
+        Please check your working tree:
+
+        ${chalk.bold('git status')}
+
+      `));
+
+      throw reason;
+    }),
   () => execaPipeError('npm whoami')
     .then(({ stdout }) => stdout)
     .catch((reason) => {
